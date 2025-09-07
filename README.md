@@ -45,12 +45,12 @@ FIXES To Implement:
 		. Reset Level Toggle
 		
 	General Fixes:
-		.More Structured Code and Project Architecture
-		.Use Events for High Level Systems(Menu Changes, Level Reset,Origin Shifting)
-		.Actual Version Control Ensures Project Not Lost.
+		. More Structured Code and Project Architecture
+		. Use Events for High Level Systems(Menu Changes, Level Reset,Origin Shifting)
+		. Actual Version Control Ensures Project Not Lost.
 
 
-****
+
 Resources Used:
 --
 < <https://www.asawicki.info/Mirror/Car%20Physics%20for%20Games/Car%20Physics%20for%20Games.html>> - General Car Physics for Games
@@ -60,7 +60,6 @@ Resources Used:
 https://auto.howstuffworks.com/engine.htm -- Helped me with the general idea of how car and truck engines work.
 
 Nowadays there are so many tutorials on the web on how to build a car or truck tutorials.
-****
 Game Inspiration for the Original Project
 --
 https://www.gog.com/en/game/hard_truck_2_king_of_the_road -- Game that inspired me to embark on the original project. 
