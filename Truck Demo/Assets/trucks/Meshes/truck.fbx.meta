@@ -1,0 +1,191 @@
+fileFormatVersion: 2
+guid: 985b2f74c9b002940af63f9c8a650562
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Body
+    100002: DrawCall_0816
+    100004: DrawCall_0817
+    100006: DrawCall_0818
+    100008: DrawCall_0819
+    100010: DrawCall_0820
+    100012: DrawCall_0821
+    100014: DrawCall_0843
+    100016: //RootNode
+    100018: DrawCall_0844
+    100020: polySurface2
+    100022: transform1
+    100024: b1
+    100026: b2
+    100028: b3
+    100030: b4
+    100032: body
+    100034: front_left
+    100036: front_right
+    400000: Body
+    400002: DrawCall_0816
+    400004: DrawCall_0817
+    400006: DrawCall_0818
+    400008: DrawCall_0819
+    400010: DrawCall_0820
+    400012: DrawCall_0821
+    400014: DrawCall_0843
+    400016: //RootNode
+    400018: DrawCall_0844
+    400020: polySurface2
+    400022: transform1
+    400024: b1
+    400026: b2
+    400028: b3
+    400030: b4
+    400032: body
+    400034: front_left
+    400036: front_right
+    2100000: af359972_dds1
+    2100002: d0706c6a_dds1
+    2100004: 3c680e30_dds1
+    2100006: Truck
+    2100008: tyres
+    2100010: body1
+    2300000: Body
+    2300002: DrawCall_0816
+    2300004: DrawCall_0817
+    2300006: DrawCall_0818
+    2300008: DrawCall_0819
+    2300010: DrawCall_0820
+    2300012: DrawCall_0821
+    2300014: DrawCall_0843
+    2300016: polySurface2
+    2300018: b1
+    2300020: b2
+    2300022: b3
+    2300024: b4
+    2300026: body
+    2300028: front_left
+    2300030: front_right
+    3300000: Body
+    3300002: DrawCall_0816
+    3300004: DrawCall_0817
+    3300006: DrawCall_0818
+    3300008: DrawCall_0819
+    3300010: DrawCall_0820
+    3300012: DrawCall_0821
+    3300014: DrawCall_0843
+    3300016: polySurface2
+    3300018: b1
+    3300020: b2
+    3300022: b3
+    3300024: b4
+    3300026: body
+    3300028: front_left
+    3300030: front_right
+    4300000: DrawCall_0843
+    4300002: DrawCall_0821
+    4300004: DrawCall_0820
+    4300006: DrawCall_0819
+    4300008: DrawCall_0818
+    4300010: DrawCall_0817
+    4300012: DrawCall_0816
+    4300014: Body
+    4300016: polySurface2
+    4300018: b3
+    4300020: b4
+    4300022: b2
+    4300024: front_right
+    4300026: b1
+    4300028: front_left
+    4300030: body
+    9500000: //RootNode
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: body1
+    second: {fileID: 2100000, guid: c6b4a004a9133994499db97290d376a6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: tyres
+    second: {fileID: 2100000, guid: 450704b084dd89344996bf9b5851a050, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
