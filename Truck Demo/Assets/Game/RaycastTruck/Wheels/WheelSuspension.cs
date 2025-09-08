@@ -84,37 +84,52 @@ public class WheelSuspension : MonoBehaviour
 
     public void Engine(float EngineForce)
     {
-        //Improve later for momentum
+      
         if (isGrounded)
         {
-
+            /*
             Vector3 WheelVelocity = truck.rb.GetPointVelocity(hit.point);
             
-            Vector3 RollingResitance = transform.TransformDirection(transform.InverseTransformDirection(WheelVelocity)) * (-truck.truck.Drag);
-            RollingResitance.y = 0;
-            Vector3 FreeWheel = transform.TransformDirection(transform.InverseTransformDirection(WheelVelocity)) * truck.truck.Mass;
-            FreeWheel.y = 0;
+            Vector3 RollingResitance = Vector3.Dot(transform.forward,WheelVelocity) * transform.forward * (-truck.truck.Drag);
+       
+            Vector3 FreeWheel = Vector3.Dot(transform.forward, WheelVelocity) * transform.forward * truck.truck.Mass ;
+           
             Vector3 DownForce = -transform.up * WheelVelocity.normalized.magnitude * truck.truck.DownForce ;
 
             Vector3 Fwd = transform.TransformDirection(Vector3.forward) * (EngineForce);
-
-            Vector3 Force = Fwd  + RollingResitance;
+       
+            Vector3 Force = Fwd + RollingResitance + FreeWheel;
+           
+      
+            truck.rb.AddForceAtPosition(DownForce,hit.point);
         
-            truck.rb.AddRelativeForce(DownForce);
-            float accel = Force.magnitude / truck.rb.mass;
-            float Speed = accel;
             //add hit.point when downforce and drag is in there!
-            Force.y = 0;
+
             truck.rb.AddForceAtPosition(Force, hit.point);
+        */
+
+            Vector3 WheelVelocity = truck.rb.GetPointVelocity(hit.point);
+
+            Vector3 WheelForwardVelocity = Vector3.Dot(WheelVelocity,transform.forward) * transform.forward;
+
+            Vector3 lateralForce = Vector3.Cross(hit.normal, transform.forward).normalized * Vector3.Dot(WheelVelocity, Vector3.Cross(hit.normal, transform.forward).normalized) * -truck.truck.Drag;
+
+            Vector3 fwd = -Vector3.Cross(hit.normal,transform.right).normalized * EngineForce;
+            Vector3 rollingResisitance = WheelForwardVelocity * -truck.truck.Drag;
+            Vector3 sideVelocity = Vector3.Dot(Vector3.Cross(hit.normal, transform.forward).normalized, WheelVelocity) * Vector3.Cross(hit.normal, transform.forward).normalized * -truck.truck.Drag;
+            Vector3 forwardVelocity = -Vector3.Dot(sideVelocity,transform.forward) * transform.forward * truck.truck.Mass;
+            Vector3 wheelForce = fwd + forwardVelocity + sideVelocity+ rollingResisitance + lateralForce;
+            truck.rb.AddForceAtPosition(wheelForce,hit.point);
         }
+
     }
     void Suspension()
     {
-        Vector3 DownDir =-truck.rb.transform.up;
+        Vector3 DownDir =-transform.up;
         if(Physics.Raycast(transform.position,DownDir,out hit,truck.truck.MaxSuspensionHeight -truck.truck.WheelRadius))
         {
             isGrounded = true;
-   
+            
             float compressionRatio = ((hit.distance) / truck.truck.MaxSuspensionHeight) + truck.truck.WheelRadius;
             compressionRatio = -compressionRatio + 1;
             Vector3 WheelVelocity = truck.rb.GetPointVelocity(hit.point);
@@ -122,18 +137,17 @@ public class WheelSuspension : MonoBehaviour
             float lastCompressionRatio = compressionRatio;
 
    
-            Vector3 UpForce = -DownDir  * compressionRatio* truck.truck.SupsensionForce;
+            Vector3 UpForce =  transform.up * compressionRatio* truck.truck.SupsensionForce;
             Vector3 DampForce = (-WheelVelocity) * truck.truck.Damp;
             
             Vector3 SupsensionForce = UpForce + DampForce;
-            SupsensionForce.x = 0;
-            SupsensionForce.z = 0;
+         
             if (compressionRatio > truck.truck.RestLength)
             {
                 compressionRatio = truck.truck.RestLength;
             }
        
-            
+            SupsensionForce =Vector3.Dot(SupsensionForce,-DownDir) * hit.normal;
             truck.rb.AddForceAtPosition(SupsensionForce, hit.point);
 
             transform.GetChild(0).transform.position = transform.position + Vector3.down * (compressionRatio);

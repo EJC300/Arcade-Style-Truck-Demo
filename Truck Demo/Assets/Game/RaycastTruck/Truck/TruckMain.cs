@@ -49,11 +49,11 @@ public class TruckMain : MonoBehaviour
 
           if(Mathf.Abs( Roll.x) >= 0)
         {
-            transform.localEulerAngles = new Vector3(0, Roll.y, Roll.z);
+            //transform.localEulerAngles = new Vector3(0, Roll.y, Roll.z);
         }
         if (Mathf.Abs(Roll.z) >= 0)
         {
-            transform.localEulerAngles = new Vector3(Roll.x, Roll.y, 0);
+          // transform.localEulerAngles = new Vector3(Roll.x, Roll.y, 0);
         }
 
       
