@@ -10,7 +10,8 @@ public class TruckMain : MonoBehaviour
     public Transform cg;
     public Transform FrontWeight;
     public Transform RearWeight;
-    public Rigidbody rb;
+    public Rigidbody rb {  get;  set; }
+  
     float currentTime;
     float oldTime;
     Vector3 CurrentVelocity;
@@ -21,7 +22,7 @@ public class TruckMain : MonoBehaviour
      
         rb = GetComponent<Rigidbody>();
         rb.mass = truck.Mass;
-        rb.centerOfMass = Vector3.down *2;
+        rb.centerOfMass = Vector3.down;
         
         foreach (WheelSuspension wheel in truck.wheels)
         {

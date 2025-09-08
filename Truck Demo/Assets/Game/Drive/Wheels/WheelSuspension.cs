@@ -4,26 +4,34 @@ using UnityEngine;
 
 public class WheelSuspension : MonoBehaviour
 {
-    public WheelSuspension oppositeWheel;
+    public WheelSuspension WheelOpposite { get; set; }
+   
     public TruckMain truck;
-    public bool LeftWheel;
-    public bool RightWheel;
-    public bool Steering;
+    [SerializeField] bool LeftWheel;
+    [SerializeField] bool RightWheel;
+    public bool Steering { get; set; }
     private RaycastHit hit;
-   public bool isGrounded;
-    public float EngineForce;
-    [SerializeField]
+    public bool isGrounded {  get; set; }
+    public float EngineForce { get; set; }
+
+    public float MaxSuspensionHeight { get; set; }
+    
+    public float SuspensionStiffness {  get; set; }
+
+    public float SuspensionDamp {  get; set; }
+
+    public float WheelRadius {  get; set; }
+
+
     float SteerAngle = 0;
-    public void Init()
-    {
-       
-    }
-    float timer = 60;
     float AckerManLeft = 0;
     float AckerManRight = 0;
+
+
+
     public void Awake()
     {
-        Init();
+      
     }
 
     public  float GetWheelRPM()
@@ -76,7 +84,7 @@ public class WheelSuspension : MonoBehaviour
       
         if (isGrounded)
         {
-            Vector3 wheelRight = (hit.point - oppositeWheel.hit.point ).normalized;
+            Vector3 wheelRight = (hit.point - WheelOpposite .hit.point ).normalized;
 
             Vector3 wheelForward =  Vector3.Cross(hit.normal,wheelRight);
             Vector3 WheelVelocity = truck.rb.GetPointVelocity(hit.point);
@@ -96,7 +104,7 @@ public class WheelSuspension : MonoBehaviour
             
             Vector3 Force = Vector3.Dot(Fwd,wheelForward) * wheelForward;
 
-            float cornerForce  = -Mathf.Atan ( Mathf.Deg2Rad*((WheelVelocity.magnitude * truck.truck.WheelRadius * Mathf.Deg2Rad)) -Force.magnitude/(Force.magnitude));
+            float cornerForce  = -Mathf.Atan ( Mathf.Deg2Rad*((WheelVelocity.magnitude *WheelRadius * Mathf.Deg2Rad)) -Force.magnitude/(Force.magnitude));
             Debug.Log(cornerForce);
 
 
@@ -150,20 +158,20 @@ public class WheelSuspension : MonoBehaviour
     void Suspension()
     {
         Vector3 DownDir =-transform.up;
-        if (Physics.Raycast(transform.position, DownDir, out hit, truck.truck.MaxSuspensionHeight - truck.truck.WheelRadius))
+        if (Physics.Raycast(transform.position, DownDir, out hit, MaxSuspensionHeight - WheelRadius))
         {
             if (!hit.collider.gameObject != truck.gameObject)
             {
                 isGrounded = true;
 
-                float compressionRatio = ((hit.distance) / truck.truck.MaxSuspensionHeight) + truck.truck.WheelRadius;
+                float compressionRatio = ((hit.distance) / MaxSuspensionHeight) + WheelRadius;
                 compressionRatio = -compressionRatio + 1;
                 Vector3 WheelVelocity = truck.rb.GetPointVelocity(hit.point);
 
                 float lastCompressionRatio = compressionRatio;
 
 
-                Vector3 UpForce = transform.up * compressionRatio * truck.truck.SupsensionForce;
+                Vector3 UpForce = transform.up * compressionRatio * SuspensionStiffness;
                 Vector3 DampForce = (-WheelVelocity) * truck.truck.Damp;
 
                 Vector3 SupsensionForce = UpForce + DampForce;
@@ -182,7 +190,7 @@ public class WheelSuspension : MonoBehaviour
         else
         {
             isGrounded = false;
-            transform.GetChild(0).transform.position = transform.position + new Vector3(0, -truck.truck.MaxSuspensionHeight * 0.5f, 0);
+            transform.GetChild(0).transform.position = transform.position + new Vector3(0, -MaxSuspensionHeight * 0.5f, 0);
         }
         if(isGrounded)
         {

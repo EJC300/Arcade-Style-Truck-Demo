@@ -24,9 +24,9 @@ public class SimplePlayer : MonoBehaviour
     {
         Init();
     }
-   void DriveVehicle()
+    void DriveVehicle()
     {
-     
+
         motor.engineSound = truck.engineSound;
         if (Input.GetAxis("Vertical") < -0.5)
         {
@@ -40,21 +40,21 @@ public class SimplePlayer : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            motor.Reverse = 1;
+            motor.Reverse =true;
         }
         else if (Input.GetKeyDown(KeyCode.X))
         {
-            motor.Reverse = 0;
+            motor.Reverse = false;
         }
 
         foreach (WheelSuspension wheel in truck.truck.wheels)
         {
-            if (motor.Reverse < 1)
-            {
 
+            if (!motor.Reverse)
+            {
                 wheel.EngineForce = (motor.EngineForce(Input.GetAxis("Vertical"), truck.truck));
             }
-            else if(motor.Reverse > 0)
+            if (motor.Reverse)
             {
                 wheel.EngineForce = (motor.ReverseEngineForce(Input.GetAxis("Vertical"), truck.truck));
             }

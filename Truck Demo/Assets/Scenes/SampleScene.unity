@@ -2761,7 +2761,7 @@ GameObject:
   - component: {fileID: 318272651}
   - component: {fileID: 318272652}
   m_Layer: 0
-  m_Name: WheelBaseBR1
+  m_Name: WheelBaseBL1
   m_TagString: Untagged
   m_Icon: {fileID: 7148428337604731935, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -2795,14 +2795,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 906d25695f9a33a45b8f7a98a63e2643, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oppositeWheel: {fileID: 726765873}
   truck: {fileID: 711382248}
   LeftWheel: 0
   RightWheel: 0
-  Steering: 0
-  isGrounded: 0
-  EngineForce: 0
-  SteerAngle: 0
 --- !u!1 &320881135
 GameObject:
   m_ObjectHideFlags: 0
@@ -2814,7 +2809,7 @@ GameObject:
   - component: {fileID: 320881136}
   - component: {fileID: 320881137}
   m_Layer: 0
-  m_Name: WheelBase3
+  m_Name: WheelBaseBR2
   m_TagString: Untagged
   m_Icon: {fileID: 7148428337604731935, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -2848,14 +2843,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 906d25695f9a33a45b8f7a98a63e2643, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oppositeWheel: {fileID: 1055263516}
   truck: {fileID: 711382248}
   LeftWheel: 0
   RightWheel: 0
-  Steering: 0
-  isGrounded: 0
-  EngineForce: 0
-  SteerAngle: 0
 --- !u!1 &330015439
 GameObject:
   m_ObjectHideFlags: 0
@@ -3596,7 +3586,7 @@ Transform:
   m_GameObject: {fileID: 415906470}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.2598019, y: -2.1017826, z: 3.7044914}
+  m_LocalPosition: {x: 1.2598025, y: -2.1017826, z: 3.7044988}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3615,14 +3605,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 906d25695f9a33a45b8f7a98a63e2643, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oppositeWheel: {fileID: 1474494426}
   truck: {fileID: 711382248}
   LeftWheel: 0
   RightWheel: 1
-  Steering: 1
-  isGrounded: 0
-  EngineForce: 0
-  SteerAngle: 0
 --- !u!1 &429288098
 GameObject:
   m_ObjectHideFlags: 0
@@ -6286,7 +6271,7 @@ MonoBehaviour:
     Transmission: 0.1
     WheelBaseHeight: 1
     RTrackLength: 5
-    MaxWheelRPM: 0
+    MaxWheelRPM: 1600
     Damp: 20000
     Drag: 6000
     gearRatios:
@@ -6326,7 +6311,6 @@ MonoBehaviour:
   cg: {fileID: 1769229123}
   FrontWeight: {fileID: 1544659097}
   RearWeight: {fileID: 544455994}
-  rb: {fileID: 711382249}
 --- !u!54 &711382249
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6365,7 +6349,7 @@ GameObject:
   - component: {fileID: 726765872}
   - component: {fileID: 726765873}
   m_Layer: 0
-  m_Name: WheelBase2
+  m_Name: WheelBaseBR1
   m_TagString: Untagged
   m_Icon: {fileID: 7148428337604731935, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -6399,14 +6383,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 906d25695f9a33a45b8f7a98a63e2643, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oppositeWheel: {fileID: 318272652}
   truck: {fileID: 711382248}
   LeftWheel: 0
   RightWheel: 0
-  Steering: 0
-  isGrounded: 0
-  EngineForce: 0
-  SteerAngle: 0
 --- !u!1 &747192339
 GameObject:
   m_ObjectHideFlags: 0
@@ -9079,7 +9058,7 @@ GameObject:
   - component: {fileID: 1055263515}
   - component: {fileID: 1055263516}
   m_Layer: 0
-  m_Name: WheelBase4
+  m_Name: WheelBaseBL2
   m_TagString: Untagged
   m_Icon: {fileID: 7148428337604731935, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -9113,14 +9092,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 906d25695f9a33a45b8f7a98a63e2643, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oppositeWheel: {fileID: 320881137}
   truck: {fileID: 711382248}
   LeftWheel: 0
   RightWheel: 0
-  Steering: 0
-  isGrounded: 0
-  EngineForce: 0
-  SteerAngle: 0
 --- !u!1 &1076153593
 GameObject:
   m_ObjectHideFlags: 0
@@ -13021,7 +12995,7 @@ Transform:
   m_GameObject: {fileID: 1474494424}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.2890813, y: -2.102549, z: 3.7027166}
+  m_LocalPosition: {x: -1.2890817, y: -2.102549, z: 3.7027135}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13040,14 +13014,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 906d25695f9a33a45b8f7a98a63e2643, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oppositeWheel: {fileID: 415906472}
   truck: {fileID: 711382248}
   LeftWheel: 1
   RightWheel: 0
-  Steering: 1
-  isGrounded: 0
-  EngineForce: 0
-  SteerAngle: 0
 --- !u!1 &1483095156
 GameObject:
   m_ObjectHideFlags: 0
@@ -19106,6 +19075,9 @@ GameObject:
   - component: {fileID: 711382249}
   - component: {fileID: 711382248}
   - component: {fileID: 1841947129688725}
+  - component: {fileID: 95182517346926895}
+  - component: {fileID: 95182517346926894}
+  - component: {fileID: 95182517346926893}
   m_Layer: 0
   m_Name: truck
   m_TagString: Untagged
@@ -19215,10 +19187,10 @@ Transform:
   m_Children:
   - {fileID: 726765872}
   - {fileID: 318272651}
-  - {fileID: 1474494425}
-  - {fileID: 415906471}
   - {fileID: 1055263515}
   - {fileID: 320881136}
+  - {fileID: 1474494425}
+  - {fileID: 415906471}
   m_Father: {fileID: 4432328581935700}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4620130954882936
@@ -19652,6 +19624,66 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &95182517346926893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841947129688724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 801d1e2a23a38c2419f61d5c3dd1fe6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SuspesnionHeight: 0.75
+  WheelRadius: -0.07
+  SuspensionStiffness: 620000
+  SuspensionDamp: 3000
+  LeftWheel: {fileID: 1055263516}
+  RightWheel: {fileID: 320881137}
+  PoweredWheel: 1
+  SteerWheel: 0
+--- !u!114 &95182517346926894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841947129688724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 801d1e2a23a38c2419f61d5c3dd1fe6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SuspesnionHeight: 0.75
+  WheelRadius: -0.07
+  SuspensionStiffness: 620000
+  SuspensionDamp: 3000
+  LeftWheel: {fileID: 318272652}
+  RightWheel: {fileID: 726765873}
+  PoweredWheel: 1
+  SteerWheel: 0
+--- !u!114 &95182517346926895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841947129688724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 801d1e2a23a38c2419f61d5c3dd1fe6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SuspesnionHeight: 0.75
+  WheelRadius: -0.07
+  SuspensionStiffness: 620000
+  SuspensionDamp: 3000
+  LeftWheel: {fileID: 1474494426}
+  RightWheel: {fileID: 415906472}
+  PoweredWheel: 0
+  SteerWheel: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

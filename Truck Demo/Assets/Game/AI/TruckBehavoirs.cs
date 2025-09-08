@@ -174,7 +174,7 @@ public static void FollowWaypoint(TestAI driver,float dist)
     public static void Reverse(TestAI driver,Transform tgt)
     {
         SimpleEngine motor = driver.motor;
-        motor.Reverse = Mathf.FloorToInt(-(driver.transform.InverseTransformPoint(driver.MostThreatening()).z / driver.transform.InverseTransformPoint(driver.currentPoint.transform.position).z));
+       // motor.Reverse = Mathf.FloorToInt(-(driver.transform.InverseTransformPoint(driver.MostThreatening()).z / driver.transform.InverseTransformPoint(driver.currentPoint.transform.position).z));
         float steer = (driver.transform.InverseTransformPoint(driver.transform.position).x + driver.transform.InverseTransformPoint(driver.currentPoint.transform.position).x);
         driver.steer = steer;
     }

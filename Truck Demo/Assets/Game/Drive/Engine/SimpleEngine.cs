@@ -40,10 +40,10 @@ public class SimpleEngine
     public int appropiateGear = 0;
     public int gearIndex = 0;
     public float EnginePitch;
-    public int Reverse;
+    public bool Reverse;
 
     
-
+   
     void PlayEngineSnd()
     {
         if (engineSound != null)
@@ -54,20 +54,18 @@ public class SimpleEngine
             }
         }
     }
-    void ShiftGears()
+    void ShiftGears(float maxWheelRPM)
     {
-        CurrentGear = gearRatios[gearIndex];
+        
 
-        if (Reverse < 1)
-        {
-
-            if (EnginePower >= 1000)
+        
+            if (EnginePower >= maxWheelRPM)
             {
 
                 for (int i = 0; i < gearRatios.Count; i++)
                 {
 
-                    if (DriveWheelRPM * gearRatios[i] < 1000)
+                    if (DriveWheelRPM * gearRatios[i] < maxWheelRPM)
                     {
 
                         appropiateGear = i;
@@ -77,24 +75,26 @@ public class SimpleEngine
                 }
                 gearIndex = appropiateGear;
             }
-            if (EnginePower <= 1000)
-            {
-
-                for (int i = 0; i < gearRatios.Count; i++)
+         
+                if (EnginePower <= maxWheelRPM)
                 {
-                    if (DriveWheelRPM * gearRatios[i] > 1000)
+
+                    for (int i = 0; i < gearRatios.Count; i++)
                     {
-                        appropiateGear = i;
+                        if (DriveWheelRPM * gearRatios[i] > maxWheelRPM * 0.5f)
+                        {
+                            appropiateGear = i;
 
-                        break;
+                            break;
+                        }
                     }
+                    gearIndex = appropiateGear;
                 }
-                gearIndex = appropiateGear;
-            }
 
 
-        }
-       
+       CurrentGear = gearRatios[gearIndex];
+
+
     }
    
 
@@ -109,12 +109,12 @@ public class SimpleEngine
             EnginePower = Mathf.Clamp(EnginePower, -MaxPower/2,0);
         }
 
-        if (pedal > 0.9f)
+        else if (pedal > 0.9f)
         {
 
             EnginePower -= (((EngineTorque) / -7) * -pedal);
 
-            EnginePitch += pedal * -((EnginePower / 5252 / CurrentGear)) / (DriveWheelRPM / 5252) * (Time.deltaTime);
+            EnginePitch += pedal * ((EnginePower / 5252 / CurrentGear)) / (DriveWheelRPM / 5252) * (Time.deltaTime);
         }
         else if (pedal < 0.9f)
         {
@@ -135,9 +135,9 @@ public class SimpleEngine
 
         
 
-        EngineTorque = (DriveWheelRPM / 60 / 2 * Mathf.PI) * CurrentGear + 15;
+            EngineTorque = (DriveWheelRPM / 60 / 2 * Mathf.PI) * CurrentGear + 15;
 
-        ShiftGears();
+            ShiftGears(truck.MaxWheelRPM);
  
             if (pedal < -0.5)
             {
