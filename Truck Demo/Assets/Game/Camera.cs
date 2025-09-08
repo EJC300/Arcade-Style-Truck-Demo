@@ -14,6 +14,8 @@ public class Camera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.LookAt(target);
+        Vector3 forward =  target.position + target.rotation * new Vector3(0, 5,-15);
+        transform.position = Vector3.Lerp(transform.position, forward,1.0f * Time.deltaTime);
+        transform.LookAt(target,target.up);
     }
 }

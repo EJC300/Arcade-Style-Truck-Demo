@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class WheelSuspension : MonoBehaviour
 {
-
+    public WheelSuspension oppositeWheel;
     public TruckMain truck;
     public bool LeftWheel;
     public bool RightWheel;
     public bool Steering;
     private RaycastHit hit;
-    private bool isGrounded;
+   public bool isGrounded;
     public float EngineForce;
     [SerializeField]
     float SteerAngle = 0;
-    float SteerResistance;
     public void Init()
     {
        
@@ -47,26 +46,16 @@ public class WheelSuspension : MonoBehaviour
     public void Steer(float steering)
     {
 
-        if (GetWheelRPM() > 2000)
-        {
-            SteerResistance = (GetWheelRPM() + 1);
-            SteerResistance = Mathf.Clamp(SteerResistance, -4, 4);
-
-        }
-        else
-        {
-            SteerResistance = (GetWheelRPM() + 1);
-            SteerResistance = Mathf.Clamp(SteerResistance, -1, 1);
-        }
+   
         if (LeftWheel)
         {
-            AckerManLeft = Mathf.Rad2Deg * Mathf.Atan((truck.truck.WheelBaseHeight / (truck.truck.turnRadius + truck.truck.RTrackLength / 2)) * steering) / SteerResistance;
-            AckerManRight = Mathf.Rad2Deg * Mathf.Atan((truck.truck.WheelBaseHeight / (truck.truck.turnRadius - truck.truck.RTrackLength / 2)) * steering) / SteerResistance; ;
+            AckerManLeft = Mathf.Rad2Deg * Mathf.Atan((truck.truck.WheelBaseHeight / (truck.truck.turnRadius + truck.truck.RTrackLength / 2)) * steering);
+            AckerManRight = Mathf.Rad2Deg * Mathf.Atan((truck.truck.WheelBaseHeight / (truck.truck.turnRadius - truck.truck.RTrackLength / 2)) * steering) ;
         }
         else if(RightWheel)
         {
-            AckerManLeft = Mathf.Rad2Deg * Mathf.Atan((truck.truck.WheelBaseHeight / (truck.truck.turnRadius - truck.truck.RTrackLength / 2)) * steering) / SteerResistance; ;
-            AckerManRight = Mathf.Rad2Deg * Mathf.Atan((truck.truck.WheelBaseHeight / (truck.truck.turnRadius + truck.truck.RTrackLength / 2)) * steering) / SteerResistance; ;
+            AckerManLeft = Mathf.Rad2Deg * Mathf.Atan((truck.truck.WheelBaseHeight / (truck.truck.turnRadius - truck.truck.RTrackLength / 2)) * steering);
+            AckerManRight = Mathf.Rad2Deg * Mathf.Atan((truck.truck.WheelBaseHeight / (truck.truck.turnRadius + truck.truck.RTrackLength / 2)) * steering) ;
         }
 
         if(RightWheel)
@@ -87,78 +76,113 @@ public class WheelSuspension : MonoBehaviour
       
         if (isGrounded)
         {
-            /*
+            Vector3 wheelRight = (hit.point - oppositeWheel.hit.point ).normalized;
+
+            Vector3 wheelForward =  Vector3.Cross(hit.normal,wheelRight);
             Vector3 WheelVelocity = truck.rb.GetPointVelocity(hit.point);
             
-            Vector3 RollingResitance = Vector3.Dot(transform.forward,WheelVelocity) * transform.forward * (-truck.truck.Drag);
-       
-            Vector3 FreeWheel = Vector3.Dot(transform.forward, WheelVelocity) * transform.forward * truck.truck.Mass ;
-           
+            Vector3 lateralVelocity = Vector3.Dot(WheelVelocity, wheelRight) * wheelRight;
+
+            Vector3 flatVelocity = Vector3.Dot(WheelVelocity, wheelForward) * wheelForward;
+
+
             Vector3 DownForce = -transform.up * WheelVelocity.normalized.magnitude * truck.truck.DownForce ;
 
-            Vector3 Fwd = transform.TransformDirection(Vector3.forward) * (EngineForce);
-       
-            Vector3 Force = Fwd + RollingResitance + FreeWheel;
-           
-      
-            truck.rb.AddForceAtPosition(DownForce,hit.point);
+            Vector3 slidingForce = (0.5f * (flatVelocity + lateralVelocity));
+
+            Vector3 Fwd =(-slidingForce * truck.truck.Mass * 0.15f /Time.fixedDeltaTime);
+            
         
+            
+            Vector3 Force = Vector3.Dot(Fwd,wheelForward) * wheelForward;
+
+            float cornerForce  = -Mathf.Atan ( Mathf.Deg2Rad*((WheelVelocity.magnitude * truck.truck.WheelRadius * Mathf.Deg2Rad)) -Force.magnitude/(Force.magnitude));
+            Debug.Log(cornerForce);
+
+
+           // truck.rb.AddForceAtPosition(DownForce,hit.point);
+            truck.rb.AddForceAtPosition(EngineForce  * transform.forward,hit.point);
             //add hit.point when downforce and drag is in there!
+           
+            truck.rb.AddForceAtPosition(Fwd * cornerForce, hit.point);
+            Fwd -= Force;
+          
+            /*
+                Vector3 wheelRight = (oppositeWheel.hit.point - hit.point).normalized;
+                Vector3 wheelForward = Vector3.Cross(wheelRight, hit.normal);
+                Vector3 WheelVelocity = truck.rb.GetPointVelocity(hit.point);
 
-            truck.rb.AddForceAtPosition(Force, hit.point);
-        */
+                Vector3 lateralVelocity = Vector3.Dot(wheelRight, WheelVelocity) * wheelRight;
 
-            Vector3 WheelVelocity = truck.rb.GetPointVelocity(hit.point);
+                Vector3 forwardVelocity = Vector3.Dot(wheelForward,WheelVelocity) * wheelForward;
 
-            Vector3 WheelForwardVelocity = Vector3.Dot(WheelVelocity,transform.forward) * transform.forward;
+                Vector3 slidingVelocity = (forwardVelocity + lateralVelocity) * 0.5f;
 
-            Vector3 lateralForce = Vector3.Cross(hit.normal, transform.forward).normalized * Vector3.Dot(WheelVelocity, Vector3.Cross(hit.normal, transform.forward).normalized) * -truck.truck.Drag;
+                Vector3 slidingForce = Vector3.Dot(slidingVelocity, wheelForward) * wheelForward * truck.truck.Mass;
 
-            Vector3 fwd = -Vector3.Cross(hit.normal,transform.right).normalized * EngineForce;
-            Vector3 rollingResisitance = WheelForwardVelocity * -truck.truck.Drag;
-            Vector3 sideVelocity = Vector3.Dot(Vector3.Cross(hit.normal, transform.forward).normalized, WheelVelocity) * Vector3.Cross(hit.normal, transform.forward).normalized * -truck.truck.Drag;
-            Vector3 forwardVelocity = -Vector3.Dot(sideVelocity,transform.forward) * transform.forward * truck.truck.Mass;
-            Vector3 wheelForce = fwd + forwardVelocity + sideVelocity+ rollingResisitance + lateralForce;
-            truck.rb.AddForceAtPosition(wheelForce,hit.point);
+                Vector3 frictionForce =-slidingVelocity * 1.0f * truck.truck.Mass;
+
+                Debug.Log(slidingForce);
+
+
+                Vector3 longForce = Vector3.Dot(frictionForce, wheelForward) * wheelForward;
+                Vector3 engineForce = wheelForward * EngineForce;
+                frictionForce -= longForce;
+                truck.rb.AddForceAtPosition(frictionForce, hit.point);
+
+
+
+
+
+
+
+
+                if (EngineForce == 0)
+                {
+                    longForce *= 1.0f;
+                }
+
+                truck.rb.AddForceAtPosition(engineForce, hit.point);
+            */
         }
 
     }
     void Suspension()
     {
         Vector3 DownDir =-transform.up;
-        if(Physics.Raycast(transform.position,DownDir,out hit,truck.truck.MaxSuspensionHeight -truck.truck.WheelRadius))
+        if (Physics.Raycast(transform.position, DownDir, out hit, truck.truck.MaxSuspensionHeight - truck.truck.WheelRadius))
         {
-            isGrounded = true;
-            
-            float compressionRatio = ((hit.distance) / truck.truck.MaxSuspensionHeight) + truck.truck.WheelRadius;
-            compressionRatio = -compressionRatio + 1;
-            Vector3 WheelVelocity = truck.rb.GetPointVelocity(hit.point);
-
-            float lastCompressionRatio = compressionRatio;
-
-   
-            Vector3 UpForce =  transform.up * compressionRatio* truck.truck.SupsensionForce;
-            Vector3 DampForce = (-WheelVelocity) * truck.truck.Damp;
-            
-            Vector3 SupsensionForce = UpForce + DampForce;
-         
-            if (compressionRatio > truck.truck.RestLength)
+            if (!hit.collider.gameObject != truck.gameObject)
             {
-                compressionRatio = truck.truck.RestLength;
+                isGrounded = true;
+
+                float compressionRatio = ((hit.distance) / truck.truck.MaxSuspensionHeight) + truck.truck.WheelRadius;
+                compressionRatio = -compressionRatio + 1;
+                Vector3 WheelVelocity = truck.rb.GetPointVelocity(hit.point);
+
+                float lastCompressionRatio = compressionRatio;
+
+
+                Vector3 UpForce = transform.up * compressionRatio * truck.truck.SupsensionForce;
+                Vector3 DampForce = (-WheelVelocity) * truck.truck.Damp;
+
+                Vector3 SupsensionForce = UpForce + DampForce;
+
+              
+
+                SupsensionForce = Vector3.Dot(SupsensionForce, transform.up) * transform.up;
+                truck.rb.AddForceAtPosition(SupsensionForce, hit.point);
+
+                transform.GetChild(0).transform.position = transform.position + Vector3.down * (compressionRatio);
+                compressionRatio = lastCompressionRatio;
+
+
             }
-       
-            SupsensionForce =Vector3.Dot(SupsensionForce,-DownDir) * hit.normal;
-            truck.rb.AddForceAtPosition(SupsensionForce, hit.point);
-
-            transform.GetChild(0).transform.position = transform.position + Vector3.down * (compressionRatio);
-            compressionRatio = lastCompressionRatio;
-
-            
         }
         else
         {
-            isGrounded = false;  
-            transform.GetChild(0).transform.position = transform.position + new Vector3(0,-truck.truck.MaxSuspensionHeight * 0.5f,0);
+            isGrounded = false;
+            transform.GetChild(0).transform.position = transform.position + new Vector3(0, -truck.truck.MaxSuspensionHeight * 0.5f, 0);
         }
         if(isGrounded)
         {

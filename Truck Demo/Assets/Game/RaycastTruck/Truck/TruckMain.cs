@@ -15,6 +15,7 @@ public class TruckMain : MonoBehaviour
     float oldTime;
     Vector3 CurrentVelocity;
     Vector3 LastVelocity;
+    private bool Grounded;
     public void Init()
     {  
      
@@ -25,7 +26,7 @@ public class TruckMain : MonoBehaviour
         foreach (WheelSuspension wheel in truck.wheels)
         {
             wheel.truck = this;
-              
+            Grounded = wheel.isGrounded;
         }
     }
 
@@ -46,16 +47,17 @@ public class TruckMain : MonoBehaviour
     {
         //If the vehicle begins to rotate on the z or x axis reset the rotation its not realistic but thats the point
         Vector3 Roll = transform.localEulerAngles;
-
-          if(Mathf.Abs( Roll.x) >= 0)
+        if (Grounded)
         {
-            //transform.localEulerAngles = new Vector3(0, Roll.y, Roll.z);
+            if (Mathf.Abs(Roll.x) >= 0)
+            {
+                transform.localEulerAngles = new Vector3(0, Roll.y, Roll.z);
+            }
+            if (Mathf.Abs(Roll.z) >= 0)
+            {
+                transform.localEulerAngles = new Vector3(Roll.x, Roll.y, 0);
+            }
         }
-        if (Mathf.Abs(Roll.z) >= 0)
-        {
-          // transform.localEulerAngles = new Vector3(Roll.x, Roll.y, 0);
-        }
-
       
 
     }

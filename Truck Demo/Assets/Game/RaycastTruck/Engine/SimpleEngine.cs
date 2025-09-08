@@ -181,7 +181,7 @@ public class SimpleEngine
 
         DriveWheelRPM = Mathf.Clamp(DriveWheelRPM, -2000, 2000);
         PlayEngineSnd();
-        //engineSound.outputAudioMixerGroup.audioMixer.SetFloat("Pitch", EnginePitch);
+        engineSound.outputAudioMixerGroup.audioMixer.SetFloat("Pitch", EnginePitch);
         return EnginePower + EnginePower;
     }
 
