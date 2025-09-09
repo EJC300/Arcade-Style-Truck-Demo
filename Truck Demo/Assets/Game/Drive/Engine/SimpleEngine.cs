@@ -27,10 +27,11 @@ public class SimpleEngine
     public AudioSource engineSound;
     public List<float> gearRatios = new List<float>();
     public int MaxPower;
-    [SerializeField]
     public float DriveWheelRPM;
     public   float power = 0;
     public float lastPower;
+    private float delayTime;
+    
     [SerializeField]
     float EnginePower;
     float EngineTorque;
@@ -41,6 +42,7 @@ public class SimpleEngine
     public int gearIndex = 0;
     public float EnginePitch;
     public bool Reverse;
+    float shiftTime;
 
     
    
@@ -56,43 +58,39 @@ public class SimpleEngine
     }
     void ShiftGears(float maxWheelRPM)
     {
-        
 
-        
-            if (EnginePower >= maxWheelRPM)
+
+
+         
+
+            if (EnginePower>= maxWheelRPM * CurrentGear && appropiateGear < gearRatios.Count - 1 && Time.time > shiftTime)
             {
 
-                for (int i = 0; i < gearRatios.Count; i++)
-                {
+                appropiateGear++;
+                shiftTime = Time.time + delayTime;
+                EnginePitch *= 0.8f;
 
-                    if (DriveWheelRPM * gearRatios[i] < maxWheelRPM)
-                    {
 
-                        appropiateGear = i;
-
-                        break;
-                    }
-                }
-                gearIndex = appropiateGear;
             }
-         
-                if (EnginePower <= maxWheelRPM)
-                {
 
-                    for (int i = 0; i < gearRatios.Count; i++)
-                    {
-                        if (DriveWheelRPM * gearRatios[i] > maxWheelRPM * 0.5f)
-                        {
-                            appropiateGear = i;
+            else if (EnginePower <= maxWheelRPM * CurrentGear * 0.7f && appropiateGear > 0 && Time.time > shiftTime)
+            {
+                appropiateGear--;
 
-                            break;
-                        }
-                    }
-                    gearIndex = appropiateGear;
-                }
+                shiftTime = Time.time + delayTime * 0.2f;
+                EnginePitch *= 0.25f;
+            }
+            gearIndex = appropiateGear;
 
 
-       CurrentGear = gearRatios[gearIndex];
+
+            CurrentGear = gearRatios[gearIndex];
+            EnginePitch = Mathf.Lerp(DriveWheelRPM, maxWheelRPM, EnginePower / 100);
+
+
+
+
+
 
 
     }
@@ -114,7 +112,7 @@ public class SimpleEngine
 
             EnginePower -= (((EngineTorque) / -7) * -pedal);
 
-            EnginePitch += pedal * ((EnginePower / 5252 / CurrentGear)) / (DriveWheelRPM / 5252) * (Time.deltaTime);
+            EnginePitch = pedal * EnginePitch;
         }
         else if (pedal < 0.9f)
         {
@@ -131,8 +129,8 @@ public class SimpleEngine
     public float EngineForce(float pedal,TruckType truck)
     {
 
-
-
+        delayTime = truck.Transmission;
+         
         
 
             EngineTorque = (DriveWheelRPM / 60 / 2 * Mathf.PI) * CurrentGear + 15;
@@ -150,19 +148,19 @@ public class SimpleEngine
             if (pedal > 0.9f)
             {
            
-                EnginePower += (((EngineTorque) / CurrentGear) * pedal);
+                EnginePower += (((EngineTorque) * CurrentGear) * pedal);
 
-                EnginePitch += pedal * ((EnginePower / 5252 / CurrentGear)) / (MaxPower / 5252) * Time.deltaTime;
+               
             }
             else if (pedal < 0.9f)
             {
-                EnginePower -= DriveWheelRPM * Time.deltaTime;
+                EnginePower -= DriveWheelRPM * CurrentGear * Time.deltaTime;
 
-                EnginePitch -= ((CurrentGear / DriveWheelRPM)) * Time.deltaTime;
+               
             }
         
        
-        DriveWheelRPM = Mathf.Clamp(DriveWheelRPM, 0, 3000);
+        DriveWheelRPM = Mathf.Clamp(DriveWheelRPM, 0, truck.MaxWheelRPM);
         float DrivePitch = Mathf.Clamp(DriveWheelRPM, 4.64f, 7.00f);
         
         EnginePitch = Mathf.Clamp(EnginePitch, 4.64f,6.00f);
@@ -179,10 +177,10 @@ public class SimpleEngine
         
     
 
-        DriveWheelRPM = Mathf.Clamp(DriveWheelRPM, -2000, 2000);
+        DriveWheelRPM = Mathf.Clamp(DriveWheelRPM, -truck.MaxWheelRPM,truck.MaxWheelRPM);
         PlayEngineSnd();
         engineSound.outputAudioMixerGroup.audioMixer.SetFloat("Pitch", EnginePitch);
-        return EnginePower + EnginePower;
+        return EnginePower + EnginePower * truck.Mass * 0.01f * Time.deltaTime;
     }
 
     

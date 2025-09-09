@@ -30,7 +30,7 @@ public class TruckType
 
     public float turnRadius;
 
-    public float Transmission;
+    public float Transmission = 2.5f;
 
     public float WheelBaseHeight;
 

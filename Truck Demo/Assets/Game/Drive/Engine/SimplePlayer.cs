@@ -16,9 +16,9 @@ public class SimplePlayer : MonoBehaviour
         truck = GetComponent<TruckMain>();
         
         motor = new SimpleEngine();
-
-        motor.MaxPower = truck.truck.Power * 5252;
         motor.gearRatios = truck.truck.gearRatios;
+        motor.MaxPower = (int)(((truck.truck.Power * 5252) / truck.truck.Power) * motor.gearRatios.Count);
+       
     }
     void Awake()
     {
