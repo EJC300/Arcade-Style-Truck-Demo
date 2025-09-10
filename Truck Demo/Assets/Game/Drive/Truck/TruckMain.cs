@@ -17,6 +17,8 @@ public class TruckMain : MonoBehaviour
     Vector3 CurrentVelocity;
     Vector3 LastVelocity;
     private bool Grounded;
+    Vector3 acceleration;
+    float lastAccel;
     public void Init()
     {  
      
@@ -31,16 +33,23 @@ public class TruckMain : MonoBehaviour
         }
     }
 
-    public float GetAccel()
+
+    void CalculateAcceleration()
     {
-        
         currentTime = Time.time;
         CurrentVelocity = rb.velocity;
-        float  acceleration = (CurrentVelocity.magnitude - LastVelocity.magnitude)/ 1 + (currentTime - oldTime);
+
+        acceleration = (rb.velocity - LastVelocity) / Time.fixedDeltaTime;
+        LastVelocity = rb.velocity;
         oldTime = currentTime;
-        LastVelocity = CurrentVelocity;
-       
-        return acceleration;
+    }
+    public float GetAccel()
+    {
+
+        float accel = acceleration.magnitude;
+
+
+        return accel;
 
         
     }
@@ -48,15 +57,19 @@ public class TruckMain : MonoBehaviour
     {
         //If the vehicle begins to rotate on the z or x axis reset the rotation its not realistic but thats the point
         Vector3 Roll = transform.localEulerAngles;
-        if (rb.velocity.magnitude > 1f)
+        foreach (WheelSuspension wheel in truck.wheels)
         {
-            if (Mathf.Abs(Roll.x) >= 0)
+
+            if (rb.velocity.magnitude > 1f &&  wheel.isGrounded)
             {
-                transform.localEulerAngles = new Vector3(0, Roll.y, Roll.z);
-            }
-            if (Mathf.Abs(Roll.z) >= 0)
-            {
-                transform.localEulerAngles = new Vector3(Roll.x, Roll.y, 0);
+                if (Mathf.Abs(Roll.x) >= 0)
+                {
+                    transform.localEulerAngles = new Vector3(0, Roll.y, Roll.z);
+                }
+                if (Mathf.Abs(Roll.z) >= 0)
+                {
+                    transform.localEulerAngles = new Vector3(Roll.x, Roll.y, 0);
+                }
             }
         }
       
@@ -65,21 +78,23 @@ public class TruckMain : MonoBehaviour
     void ShiftWeight()
     {
         CurrentVelocity = transform.TransformDirection(rb.velocity);
-       
-        if(GetAccel() > 0)
+        
+        if (GetAccel() > lastAccel && CurrentVelocity.z < 0)
         {
-           cg.localPosition  = Vector3.MoveTowards(cg.localPosition, RearWeight.localPosition, GetAccel() * Time.deltaTime);
+            cg.localPosition = Vector3.MoveTowards(cg.localPosition, RearWeight.localPosition, GetAccel() * Time.deltaTime);
         }
-        else if(GetAccel() < 1)
+        else if (GetAccel() > lastAccel && CurrentVelocity.z >0)
         {
 
-           cg.localPosition = Vector3.MoveTowards(cg.localPosition, FrontWeight.localPosition,  GetAccel() * Time.deltaTime);
+            cg.localPosition = Vector3.MoveTowards(cg.localPosition, FrontWeight.localPosition, GetAccel() * Time.deltaTime);
         }
+
         else
         {
             cg.localPosition = Vector3.down;
-        }
 
+        }
+        lastAccel = GetAccel();
         rb.centerOfMass = cg.localPosition;
     }
     void Start()
@@ -89,11 +104,11 @@ public class TruckMain : MonoBehaviour
 
     private void FixedUpdate()
     {
-
-      // ShiftWeight();
+       CalculateAcceleration();
+       ShiftWeight();
        AntiRoll();
     
-        Debug.Log(rb.velocity.magnitude);
+        Debug.Log(GetAccel());
 
     }
 

@@ -15,7 +15,7 @@ public class DioramaDriver : MonoBehaviour
     {
         truck = GetComponent<TruckMain>();
         body = GetComponent<Rigidbody>();
-        motor = new SimpleEngine();
+        motor.engineSound = truck.engineSound;
 
         motor.MaxPower = truck.truck.Power * 5252;
         motor.gearRatios = truck.truck.gearRatios;
@@ -40,8 +40,10 @@ public class DioramaDriver : MonoBehaviour
 
         foreach (WheelSuspension wheel in truck.truck.wheels)
         {
-            wheel.EngineForce = engineForce;       
+            motor.DriveWheelRPM = wheel.GetWheelRPM();
+            wheel.EngineForce = engineForce;
         
+
         }
         Distance = transform.position.x;
         if(Distance > 19716)
