@@ -31,11 +31,11 @@ public class DioramaDriver : MonoBehaviour
         
         if (getCurrentSpeed() < TopSpeed)
         {
-           engineForce = motor.EngineForce(1.0f, truck.truck);
+           engineForce = motor.CalculateEngineForce(1.0f, truck.truck);
         }
         else
         {
-           engineForce = motor.EngineForce(-0.5f, truck.truck);
+           engineForce = motor.CalculateEngineForce(-0.5f, truck.truck);
         }
 
         foreach (WheelSuspension wheel in truck.truck.wheels)

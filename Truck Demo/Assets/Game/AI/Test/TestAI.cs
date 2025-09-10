@@ -193,7 +193,7 @@ public class TestAI : MonoBehaviour
         
         foreach (WheelSuspension wheel in truck.truck.wheels)
         {
-            wheel.EngineForce = (motor.EngineForce(adjustGas, truck.truck));
+            wheel.EngineForce = (motor.CalculateEngineForce(adjustGas, truck.truck));
 
             if (wheel.Steering)
             {

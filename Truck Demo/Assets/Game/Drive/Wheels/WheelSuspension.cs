@@ -40,10 +40,12 @@ public class WheelSuspension : MonoBehaviour
         {
             Vector3 WheelVelocity = truck.rb.GetPointVelocity(hit.point);
             float z = (new Vector3(truck.rb.velocity.x, 0, truck.rb.velocity.z).magnitude * 0.6213711922f);
-            z = z * 1609;
-            z = z / (60 / 2 * Mathf.PI * 4.5f);
-            z = z * Mathf.Rad2Deg;
-            return z;
+            z = z * 63360;
+            z = z / 60;
+            z = z / 28.63f;
+
+            
+            return z * 3.46f;
         }
         return 0;
     }
@@ -100,19 +102,19 @@ public class WheelSuspension : MonoBehaviour
 
             Vector3 Fwd =(-slidingForce * truck.truck.Mass * 0.15f /Time.fixedDeltaTime);
             
-        
+            
             
             Vector3 Force = Vector3.Dot(Fwd,wheelForward) * wheelForward;
 
-            float cornerForce  = -Mathf.Atan ( Mathf.Deg2Rad*((WheelVelocity.magnitude *WheelRadius * Mathf.Deg2Rad)) -Force.magnitude/(Force.magnitude));
-            Debug.Log(cornerForce);
+          
 
+           
 
            // truck.rb.AddForceAtPosition(DownForce,hit.point);
             truck.rb.AddForceAtPosition(EngineForce  * transform.forward,hit.point);
             //add hit.point when downforce and drag is in there!
            
-            truck.rb.AddForceAtPosition(Fwd * cornerForce, hit.point);
+            truck.rb.AddForceAtPosition(Fwd, hit.point);
             Fwd -= Force;
           
             /*

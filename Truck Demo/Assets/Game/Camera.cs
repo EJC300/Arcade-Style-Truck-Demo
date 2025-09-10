@@ -15,7 +15,7 @@ public class Camera : MonoBehaviour
     void Update()
     {
         Vector3 forward =  target.position + target.rotation * new Vector3(0, 5,-15);
-        transform.position = Vector3.Lerp(transform.position, forward,1.0f * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, forward,1f * Time.deltaTime);
         transform.LookAt(target,target.up);
     }
 }

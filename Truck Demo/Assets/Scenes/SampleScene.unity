@@ -6266,41 +6266,22 @@ MonoBehaviour:
     WheelRadius: -0.07
     SupsensionForce: 620000
     DownForce: 16000
-    accelRate: 1.2
+    accelRate: 8
     turnRadius: 0.56
-    Transmission: 2.1
+    Transmission: 1.2
     WheelBaseHeight: 1
     RTrackLength: 5
-    MaxWheelRPM: 160000
+    MaxWheelRPM: 1500
     Damp: 20000
     Drag: 6000
     gearRatios:
-    - 0.3
-    - 0.2
-    - 0.1
-    - 0.05
-    - 0.09
-    - 0.09
-    - 0.87
-    - 1.65
-    - 1.64
-    - 0.55
-    - 0.45
-    - 0.32
-    - 0.27
-    - 0.15
-    - 0.01
-    - 0.75
-    - 0.65
-    - 0.55
-    - 0.44
-    - 0.34
-    - 0.1
-    - 0.05
-    - 0.9
-    - 0.8
-    - 0.9
+    - 14
+    - 10
+    - 6
+    - 4
+    - 2
     - 1
+    - 0.5
     wheels:
     - {fileID: 318272652}
     - {fileID: 726765873}
@@ -19109,7 +19090,7 @@ MonoBehaviour:
     DriveWheelRPM: 0
     power: 0
     lastPower: 0
-    EnginePower: 0
+    EngineForce: 0
     CurrentPower: 0
     appropiateGear: 0
     gearIndex: 0

@@ -52,7 +52,7 @@ public class SimplePlayer : MonoBehaviour
 
             if (!motor.Reverse)
             {
-                wheel.EngineForce = (motor.EngineForce(Input.GetAxis("Vertical"), truck.truck));
+                wheel.EngineForce = (motor.CalculateEngineForce(Input.GetAxis("Vertical"), truck.truck));
             }
             if (motor.Reverse)
             {

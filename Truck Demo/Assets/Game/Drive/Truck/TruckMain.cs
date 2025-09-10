@@ -48,7 +48,7 @@ public class TruckMain : MonoBehaviour
     {
         //If the vehicle begins to rotate on the z or x axis reset the rotation its not realistic but thats the point
         Vector3 Roll = transform.localEulerAngles;
-        if (Grounded)
+        if (rb.velocity.magnitude > 1f)
         {
             if (Mathf.Abs(Roll.x) >= 0)
             {
@@ -90,10 +90,10 @@ public class TruckMain : MonoBehaviour
     private void FixedUpdate()
     {
 
-       ShiftWeight();
+      // ShiftWeight();
        AntiRoll();
     
-
+        Debug.Log(rb.velocity.magnitude);
 
     }
 

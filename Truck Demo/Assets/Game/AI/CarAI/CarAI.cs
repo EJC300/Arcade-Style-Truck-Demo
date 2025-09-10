@@ -97,7 +97,7 @@ public class CarAI : MonoBehaviour
         }
         foreach (WheelSuspension wheel in truck.truck.wheels)
         {
-            wheel.EngineForce = (motor.EngineForce(gas, truck.truck));
+            wheel.EngineForce = (motor.CalculateEngineForce(gas, truck.truck));
 
             if (wheel.Steering)
             {

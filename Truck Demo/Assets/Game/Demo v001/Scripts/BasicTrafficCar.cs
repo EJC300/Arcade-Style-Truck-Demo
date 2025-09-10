@@ -42,7 +42,7 @@ public class BasicTrafficCar : MonoBehaviour
         foreach (WheelSuspension wheel in truck.truck.wheels)
         {
 
-            wheel.EngineForce = motor.EngineForce(Gas, truck.truck);
+            wheel.EngineForce = motor.CalculateEngineForce(Gas, truck.truck);
         }
     }
    void Drive()
@@ -50,7 +50,7 @@ public class BasicTrafficCar : MonoBehaviour
         Vector3 towards = follower.transform.position;
         towards = transform.InverseTransformPoint( new Vector3( follower.position.x,transform.position.y,follower.position.z));
         float steer = towards.x / transform.InverseTransformPoint(follower.position.x, transform.position.y, follower.position.z).magnitude;
-        Debug.Log(steer * 180);
+     
         float speedDiff = towards.z/ towards.magnitude;
         Steering(180 * steer);
         if (getCurrentSpeed() < SpeedLimit)
