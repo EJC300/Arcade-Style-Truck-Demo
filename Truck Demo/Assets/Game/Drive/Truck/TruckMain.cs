@@ -59,16 +59,16 @@ public class TruckMain : MonoBehaviour
         Vector3 Roll = transform.localEulerAngles;
         foreach (WheelSuspension wheel in truck.wheels)
         {
-
+            Quaternion angleFromNormal = Quaternion.AngleAxis(Vector3.Angle(Roll, wheel.Hit.normal),Vector3.up);
             if (rb.velocity.magnitude > 1f &&  wheel.isGrounded)
             {
-                if (Mathf.Abs(Roll.x) >= 0)
+                if (Mathf.Abs( angleFromNormal.x) >= 0)
                 {
-                    transform.localEulerAngles = new Vector3(0, Roll.y, Roll.z);
+                    transform.localEulerAngles = Vector3.Lerp(Roll, new Vector3(angleFromNormal.x, Roll.y, Roll.z),5f);
                 }
-                if (Mathf.Abs(Roll.z) >= 0)
+                if (Mathf.Abs(angleFromNormal.z) >= 0)
                 {
-                    transform.localEulerAngles = new Vector3(Roll.x, Roll.y, 0);
+                    transform.localEulerAngles = Vector3.Lerp(Roll, new Vector3(Roll.x, Roll.y, angleFromNormal.z),5f);
                 }
             }
         }
@@ -108,7 +108,7 @@ public class TruckMain : MonoBehaviour
        ShiftWeight();
        AntiRoll();
     
-        Debug.Log(GetAccel());
+      
 
     }
 

@@ -381,13 +381,16 @@
 "Assets/Game/Demo v001/Scripts/WaypointManager.cs"
 "Assets/Game/Drive/Demo.cs"
 "Assets/Game/Drive/Engine/SimpleEngine.cs"
-"Assets/Game/Drive/Engine/SimplePlayer.cs"
 "Assets/Game/Drive/Truck/TruckMain.cs"
 "Assets/Game/Drive/Truck/TruckType.cs"
 "Assets/Game/Drive/Wheels/Axel.cs"
 "Assets/Game/Drive/Wheels/WheelSuspension.cs"
 "Assets/Game/GameManager.cs"
 "Assets/Game/LevelSwitcher.cs"
+"Assets/Player/GameController.cs"
+"Assets/Player/GameUIHandler.cs"
+"Assets/Player/PlayerControls.cs"
+"Assets/Player/SimplePlayer.cs"
 -langversion:9.0
 
 /deterministic

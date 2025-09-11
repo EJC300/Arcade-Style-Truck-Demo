@@ -11,6 +11,7 @@ public class WheelSuspension : MonoBehaviour
     [SerializeField] bool RightWheel;
     public bool Steering { get; set; }
     private RaycastHit hit;
+    public RaycastHit Hit { get { return hit; } }
     public bool isGrounded {  get; set; }
     public float EngineForce { get; set; }
 
