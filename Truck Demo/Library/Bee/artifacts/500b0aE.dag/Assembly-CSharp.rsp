@@ -387,10 +387,13 @@
 "Assets/Game/Drive/Wheels/WheelSuspension.cs"
 "Assets/Game/GameManager.cs"
 "Assets/Game/LevelSwitcher.cs"
+"Assets/Game/Refactor/Motor.cs"
+"Assets/Game/Refactor/RaycastTire.cs"
 "Assets/Player/GameController.cs"
 "Assets/Player/GameUIHandler.cs"
 "Assets/Player/PlayerControls.cs"
 "Assets/Player/SimplePlayer.cs"
+"Assets/Racing Editor/TrackSegment.cs"
 -langversion:9.0
 
 /deterministic

@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameUIHandler : MonoBehaviour
 {
 
-    public GameController gameController { get {  return GameController.instance; } }
+    public GameController gameController { get { return GameController.instance; } }
     //PauseMenu Pauses Game
     [SerializeField] GameObject pauseMenu;
     private float previousTimeScale = 1f;
@@ -14,33 +14,34 @@ public class GameUIHandler : MonoBehaviour
 
     void ExitToMenu()
     {
-        SceneManager.LoadSceneAsync(0);
+        SceneManager.LoadScene(0);
+        Debug.Log("ExitToMenu");
     }
 
     void PauseGame()
     {
-  
+
         if (!pauseMenu.activeInHierarchy)
         {
-            Debug.Log("Pause");
+           
             Time.timeScale = 0.0f;
             pauseMenu.SetActive(true);
-            Cursor.visible = true;
+
         }
         else
         {
             Time.timeScale = previousTimeScale;
             pauseMenu.SetActive(false);
-            Cursor.visible = false;
+
         }
     }
-  
+
     void OnExitButton()
     {
         if (ExitToMenuButton != null)
         {
             ExitToMenuButton.onClick.AddListener(ExitToMenu);
-           
+
 
         }
     }
@@ -62,7 +63,7 @@ public class GameUIHandler : MonoBehaviour
         {
             gameController.exitToMainMenuEvent -= OnExitButton;
             gameController.pauseEvent -= PauseGame;
-           // gameController.unpauseEvent -= UnPauseGame;
+            // gameController.unpauseEvent -= UnPauseGame;
         }
     }
 }

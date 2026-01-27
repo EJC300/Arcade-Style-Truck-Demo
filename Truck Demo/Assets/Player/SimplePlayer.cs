@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class SimplePlayer : MonoBehaviour
 {
-    private PlayerControls playerControls
-    {
-        get { return PlayerControls.instance; }
-    }
+   
     [SerializeField]
     public Light redlight;
     [SerializeField]
@@ -17,6 +14,7 @@ public class SimplePlayer : MonoBehaviour
     private SimpleEngine motor;
     void Init()
     {
+   
         truck = GetComponent<TruckMain>();
 
 
@@ -24,39 +22,38 @@ public class SimplePlayer : MonoBehaviour
         motor.MaxPower = (int)(((truck.truck.Power * 5252) / truck.truck.Power) * motor.gearRatios.Count);
 
     }
-    void Awake()
+    void Start()
     {
+     
         Init();
     }
 
     private void OnEnable()
     {
-        if (playerControls != null)
-        {
-            playerControls.Acceleration += Gas;
-            playerControls.Braking += Brake;
-            playerControls.Turning += Steer;
-        }
+     
+    
+            PlayerControls.instance.Acceleration += Gas;
+            PlayerControls.instance.Braking += Brake;
+            PlayerControls.instance.Turning += Steer;
+        
     }
 
 
     private void OnDisable()
     {
-        if (playerControls != null)
-        {
-            playerControls.Acceleration -= Gas;
-            playerControls.Braking -= Brake;
-            playerControls.Turning -= Steer;
-        }
+        
+            PlayerControls.instance.Acceleration -= Gas;
+            PlayerControls.instance.Braking -= Brake;
+            PlayerControls.instance.Turning -= Steer;
+        
     }
     private void OnDestroy()
     {
-        if (playerControls != null)
-        {
-            playerControls.Acceleration -= Gas;
-            playerControls.Braking -= Brake;
-            playerControls.Turning -= Steer;
-        }
+       
+            PlayerControls.instance.Acceleration -= Gas;
+            PlayerControls.instance.Braking -= Brake;
+           PlayerControls.instance.Turning -= Steer;
+        
     }
     private void Gas(float gasPedal)
     {
@@ -66,6 +63,7 @@ public class SimplePlayer : MonoBehaviour
             motor.DriveWheelRPM = wheel.GetWheelRPM();
             redlight.intensity = 2.5f;
             redlight2.intensity = 2.5f;
+
         }
     }
     void Brake(float brakePedal)

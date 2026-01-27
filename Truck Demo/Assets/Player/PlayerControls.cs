@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 
@@ -34,7 +35,10 @@ public class PlayerControls : MonoBehaviour
     //Update to use new player Input system
     private void OnEnable()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+        }
     }
 
     private void Update()
@@ -44,6 +48,7 @@ public class PlayerControls : MonoBehaviour
         if (pedal > 0)
         {
             Acceleration?.Invoke(pedal);
+
         }
       
         if(pedal < 0)
