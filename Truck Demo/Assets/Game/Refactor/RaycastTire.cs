@@ -48,6 +48,7 @@ public class RaycastTire : MonoBehaviour
 
     #region Force Values
     private Vector3 TireForces;
+    private Vector3 SuspensionForces;
     #endregion
 
 
@@ -99,7 +100,12 @@ public class RaycastTire : MonoBehaviour
             Vector3 TotalWheelForce = transform.TransformDirection(UpForce + SpringDamp);
             TotalWheelForce.x = 0;
             TotalWheelForce.z = 0;
-            TireForces = TotalWheelForce;
+            SuspensionForces = TotalWheelForce;
+            TireForces = SuspensionForces;
+        }
+        else
+        {
+            TireForces = Vector3.zero;
         }
 
 
@@ -119,57 +125,75 @@ public class RaycastTire : MonoBehaviour
     void WheelLongForce()
     {
 
-        Vector3 ForwardRoll = transform.forward * PreviousVelocity.magnitude * RB.mass * 0.05f;
 
-        Vector3 WheelAcceleration = Vector3.Dot((VelocityAtWheelPoint() - PreviousVelocity) / Time.fixedDeltaTime, transform.forward) * -WheelStiffness * transform.forward;
-
-        Vector3 WheelDrag = 0.5f * VelocityAtWheelPoint() * VelocityAtWheelPoint().magnitude * VelocityAtWheelPoint().magnitude * -ForwardDrag;
-
-        WheelDrag = transform.InverseTransformDirection(WheelDrag);
-
-        WheelDrag = transform.TransformDirection(WheelDrag);
+        if (!Grounded) return;
 
 
+        Vector3 forwardVelocity = Vector3.Dot(VelocityAtWheelPoint(), transform.forward) * transform.forward;
+        Vector3 WheelDrag = -forwardVelocity * ForwardDrag;
 
-        TireForces +=  transform.forward * Vector3.Dot(transform.forward, WheelAcceleration) + WheelDrag + MotorPower;
+
+        TireForces += MotorPower + WheelDrag;
+
         PreviousVelocity = VelocityAtWheelPoint();
     }
     public float GetWheelForce()
     {
         Vector3 ForwardRoll = transform.forward * PreviousVelocity.magnitude * RB.mass * 0.05f;
-        float WheelForwardRoll = Mathf.Clamp( Vector3.Dot(ForwardRoll, transform.forward),Vector3.Dot(ForwardRoll, transform.forward),1);
+        float WheelForwardRoll = Mathf.Clamp(Vector3.Dot(ForwardRoll, transform.forward), Vector3.Dot(ForwardRoll, transform.forward), 1);
         return WheelForwardRoll;
     }
-    public void DriveWheels(float Power)
+
+    public void ApplyBrakes(float input, float MaxBrakeForce)
     {
-        MotorPower = transform.forward * Power;
+        if (!Grounded) return;
+        MotorPower = Vector3.zero;
+        Vector3 forwardVelocity = Vector3.Dot(VelocityAtWheelPoint(), transform.forward) * transform.forward;
+
+        float speedFactor = Mathf.Clamp01(forwardVelocity.magnitude / 20f);
+        float brakeForce = input * MaxBrakeForce * (0.5f + speedFactor * 0.5f);
+        MotorPower = -forwardVelocity.normalized * -Mathf.Sign(forwardVelocity.magnitude) * brakeForce;
+
+    }
+    public void DriveWheels(float input, AnimationCurve torqueCurve, float maxTorque)
+    {
+        if(input > 0f)
+        {
+        float wheelSpeedNormalized = GetWheelForce();
+        float torqueMultiplier = torqueCurve.Evaluate(wheelSpeedNormalized);
+        float torqueForce = input * torqueMultiplier * maxTorque;
+        MotorPower = transform.forward * torqueForce;
+        }
     }
     public void SteerWheel(float input)
     {
         //Just a simple rotation more arcade than realistic.
         if (Steer)
         {
+            float speedFactor = Mathf.Clamp01(1f - (RB.velocity.magnitude / 25f));
+            float adjustedAngle = MaxSteerWheelAngle * speedFactor;
 
-
-            transform.localRotation = Quaternion.Euler(0, Input.GetAxis("Horizontal") * MaxSteerWheelAngle, 0);
+            transform.localRotation = Quaternion.Euler(0, Input.GetAxis("Horizontal") * adjustedAngle, 0);
         }
     }
     void WheelLateralForce()
     {
 
 
-        Vector3 WheelAcceleration = Vector3.Dot((VelocityAtWheelPoint() - PreviousVelocity) / Time.fixedDeltaTime, transform.right) * -WheelStiffness * transform.right;
+        if (!Grounded) return; // Add this safety check
+                               // Get lateral (sideways) velocity
+        Vector3 lateralVelocity = Vector3.Dot(VelocityAtWheelPoint(), transform.right) * transform.right;
 
-        WheelAcceleration = transform.InverseTransformDirection(WheelAcceleration);
-        Vector3 WheelDrag = 0.5f * VelocityAtWheelPoint().normalized * VelocityAtWheelPoint().magnitude * VelocityAtWheelPoint().magnitude * -SideDrag;
+        // Strong lateral grip - resists sideways sliding
+        float lateralGripStrength = WheelStiffness * 2f; // Increase multiplier if needed
+        Vector3 LateralGrip = -lateralVelocity * lateralGripStrength;
 
-        WheelDrag = transform.InverseTransformDirection(WheelDrag);
+        // Lateral drag (additional resistance)
+        Vector3 LateralDrag = -lateralVelocity.normalized * lateralVelocity.sqrMagnitude * SideDrag;
 
-        WheelAcceleration = transform.TransformDirection(WheelAcceleration);
+        // Add both lateral forces
+        TireForces += LateralGrip + LateralDrag;
 
-        WheelDrag = transform.TransformDirection(WheelDrag);
-
-        TireForces +=  transform.forward * Vector3.Dot(transform.right, WheelAcceleration) + WheelAcceleration + WheelDrag;
         PreviousVelocity = VelocityAtWheelPoint();
 
     }
@@ -196,11 +220,15 @@ public class RaycastTire : MonoBehaviour
     }
     void FixedUpdate()
     {
-
+        SteerWheel(0);
         SuspensionForce();
         WheelLongForce();
         WheelLateralForce();
-        SteerWheel(0);
+        Debug.DrawRay(WheelRayHit.point, TireForces, Color.red);
+        Debug.DrawRay(WheelRayHit.point, transform.right * 5f, Color.green); // Wheel direction
+        Debug.DrawRay(WheelRayHit.point, VelocityAtWheelPoint(), Color.blue); // Velocity
+
+        RB.AddForceAtPosition(TireForces, WheelRayHit.point);
         if (Grounded)
         {
             RB.AddForceAtPosition(TireForces, WheelRayHit.point);
