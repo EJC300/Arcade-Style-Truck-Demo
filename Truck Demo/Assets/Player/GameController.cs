@@ -1,44 +1,67 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
-   /*
-    * Simple Event driven game state controller
-    * Allows for the pause, go back to main menu and quite
-    * Will allow for the following:
-    * Selection of the three levels and of course pause menu
-    * 
-    * 
-    */
-    public static GameController instance;
+  
+/*
+    A basic game controller that lets you pause view the instructions and reset level.
+*/
+    #region UI
+        [SerializeField] private GameObject Pause;
+    #endregion
 
-    //Pause and Unpause
-    public delegate void PauseEvent();
-    public event PauseEvent pauseEvent;
+    #region GameFlowControls
+        //Win
+        float currentTime;
+        bool pause;
+        bool demoOver;
+        
+    #endregion
 
-    public delegate void UnPauseEvent();
-    public event PauseEvent unpauseEvent;
+    #region Level
+    Scene currentScene;
 
-    //Quite To Main Menu and Exit Game
+    #endregion
 
-    public delegate void ExitToMainMenuEvent();
-    public event ExitToMainMenuEvent exitToMainMenuEvent;
-
-    public delegate void ExitGame();
-    public event ExitGame exitGameEvent;
-    private void OnEnable()
+    public void Start()
     {
-        instance = this;
+        currentTime = Time.timeScale;
+        currentScene = SceneManager.GetActiveScene();
     }
-    private void Update()
+    void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+
+        if(Input.GetKeyDown(KeyCode.Escape))
         {
-            pauseEvent?.Invoke();
-            unpauseEvent?.Invoke();
+            ViewInstructions();
         }
+
+        if(pause)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = currentTime;
+        }
+    
+    }
+    public void ResetLevel()
+    {
+        SceneManager.LoadScene(currentScene.buildIndex);
     }
 
+    
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+     void ViewInstructions()
+    {
+       pause = !Pause.activeInHierarchy;
+       Pause.SetActive(pause);
+    }
 }

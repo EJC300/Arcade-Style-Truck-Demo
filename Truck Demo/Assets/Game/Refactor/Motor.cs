@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Callbacks;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class Motor : MonoBehaviour
 {
@@ -21,7 +19,8 @@ public class Motor : MonoBehaviour
     [SerializeField] private float MaxTorque = 3000;
     [SerializeField] private int numberOfGears = 4;
     [SerializeField] private float maxSpeedPerGear = 30f; // mph per gear
-    [SerializeField] private AnimationCurve gearTorqueCurve;
+    [SerializeField] private float maxReverseSpeed = 15;
+    private bool reversing;
 
     private int currentGear = 1;
     private float TotalAcceleration;
@@ -34,8 +33,8 @@ public class Motor : MonoBehaviour
     #region BrakeValues
 
     [SerializeField] private float MaxBrake = 13000;
-    [SerializeField] private AnimationCurve BrakeTorqueCurve;
     #endregion
+
 
     public void DriverBrakeToWheels(float input)
     {
@@ -54,25 +53,46 @@ public class Motor : MonoBehaviour
     {
 
 
-        float currentSpeed = rb.velocity.magnitude * 2.237f;
-        currentGear = Mathf.Clamp(Mathf.FloorToInt(currentSpeed / maxSpeedPerGear), 1, numberOfGears);
-        float gearMinSpeed = (currentGear - 1) * maxSpeedPerGear;
-        float gearMaxSpeed = currentGear * maxSpeedPerGear;
-        float normalizedSpeedInGear = Mathf.InverseLerp(gearMinSpeed, gearMaxSpeed, currentSpeed);
-        float torqueMultiplier = EngineTorqueCurve.Evaluate(normalizedSpeedInGear);
-        float torqueForce = throttle * torqueMultiplier * MaxTorque;
 
-
-        for (int i = 0; i < Tires.Count; i++)
+        float currentSpeed = Vector3.Dot(transform.forward, rb.velocity) * 2.237f;
+        reversing = currentSpeed < 0.1f && throttle < 0f;
+        
+        if (!reversing)
         {
-            if (throttle > 0)
+            currentGear = Mathf.Clamp(Mathf.FloorToInt(currentSpeed / maxSpeedPerGear), 1, numberOfGears);
+            float gearMinSpeed = (currentGear - 1) * maxSpeedPerGear;
+            float gearMaxSpeed = currentGear * maxSpeedPerGear;
+            float normalizedSpeedInGear = Mathf.InverseLerp(gearMinSpeed, gearMaxSpeed, currentSpeed);
+            float torqueMultiplier = EngineTorqueCurve.Evaluate(normalizedSpeedInGear);
+            float torqueForce = throttle * torqueMultiplier * MaxTorque;
+
+            for (int i = 0; i < Tires.Count; i++)
             {
-                TotalAcceleration = Mathf.Lerp(TotalAcceleration, 1, Acceleration * Time.deltaTime);
+
+
+                Tires[i].DriveWheels(throttle, EngineTorqueCurve, torqueForce);
 
             }
-            Tires[i].DriveWheels(throttle, EngineTorqueCurve, torqueForce);
-
         }
+        else
+        {
+            currentGear = Mathf.FloorToInt(currentSpeed / maxReverseSpeed);
+            float gearMinSpeed = (currentGear - 1) * maxReverseSpeed;
+            float gearMaxSpeed = currentGear *  maxReverseSpeed;
+            float normalizedSpeedInGear = Mathf.InverseLerp(gearMinSpeed, gearMaxSpeed, currentSpeed);
+            float torqueMultiplier = EngineTorqueCurve.Evaluate(normalizedSpeedInGear);
+            float torqueForce = throttle * torqueMultiplier * MaxTorque * 0.25f;
+
+            for (int i = 0; i < Tires.Count; i++)
+            {
+
+
+                Tires[i].DriveWheels(throttle, EngineTorqueCurve, torqueForce);
+
+            }
+        }
+
+
 
     }
     void Start()
@@ -81,19 +101,20 @@ public class Motor : MonoBehaviour
     }
     void Update()
     {
+        //For Now Just do this.
         DriverBrakeToWheels(Input.GetAxis("Vertical"));
         DriverPowerToDriveWheels(Input.GetAxis("Vertical"));
-    
+
     }
     void FixedUpdate()
     {
         //Anti Roll Force 
         float tilt = Vector3.Dot(transform.right, Vector3.up);
 
-        // Only apply if tilted beyond threshold
+
         if (Mathf.Abs(tilt) > 0.003f)
         {
-            // Apply counter-torque to straighten up
+
             Vector3 counterTorque = -transform.forward * tilt * 600000;
             rb.AddTorque(counterTorque);
         }

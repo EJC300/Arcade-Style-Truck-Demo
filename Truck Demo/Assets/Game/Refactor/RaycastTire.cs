@@ -164,6 +164,13 @@ public class RaycastTire : MonoBehaviour
         float torqueForce = input * torqueMultiplier * maxTorque;
         MotorPower = transform.forward * torqueForce;
         }
+        else
+        {  
+            float wheelSpeedNormalized = GetWheelForce();
+            float torqueMultiplier = torqueCurve.Evaluate(wheelSpeedNormalized);
+            float torqueForce = input * torqueMultiplier * maxTorque;
+            MotorPower = -transform.forward * torqueForce;
+        }
     }
     public void SteerWheel(float input)
     {
@@ -204,11 +211,11 @@ public class RaycastTire : MonoBehaviour
         if (Grounded)
         {
             WheelModel.transform.Rotate(Vector3.right * PreviousVelocity.sqrMagnitude / 2 * Mathf.PI * WheelHeight);
-            WheelModel.transform.localPosition = Vector3.up * ((SuspensionHeight + WheelMinHeight) - WheelRayHit.distance);
+            WheelModel.transform.localPosition =   Vector3.Lerp(WheelModel.transform.localPosition,Vector3.up * ((SuspensionHeight + WheelMinHeight) - WheelRayHit.distance),WheelRayHit.distance/Time.deltaTime * 0.01f);
         }
         else
         {
-            WheelModel.transform.localPosition = StartWheelModelPosition;
+            WheelModel.transform.localPosition = Vector3.Lerp( WheelModel.transform.localPosition,StartWheelModelPosition,(SuspensionHeight + WheelMinHeight)/Time.deltaTime * 0.1f);
         }
     }
 
