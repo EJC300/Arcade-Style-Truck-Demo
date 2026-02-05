@@ -23,11 +23,7 @@ ___
 Features of the Demo:
 1. Three Demo Scenes, Driving, AI Truck Driving Demonstration, and a Main Menu
 2. Demonstration of the Arcade Driving Physics
-3. Shader Effects and Post Fx
-4. Demonstration of AI Truck maneuvering.
-5. Engine SFX
-6. Main Menu Prototype to tie everything together
-7. Graphics Effects
+3. Main Menu Prototype to tie everything together
 ****
 FIXES To Implement:
 	Driving:
@@ -46,7 +42,6 @@ FIXES To Implement:
 		
 	General Fixes:
 		. More Structured Code and Project Architecture
-		. Use Events for High Level Systems(Menu Changes, Level Reset,Origin Shifting)
 		. Actual Version Control Ensures Project Not Lost.
 
 
