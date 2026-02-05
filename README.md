@@ -24,6 +24,7 @@ Features of the Demo:
 1. Three Demo Scenes, Driving, AI Truck Driving Demonstration, and a Main Menu
 2. Demonstration of the Arcade Driving Physics
 3. Main Menu Prototype to tie everything together
+4. Stable Arcade Truck Physics
 ****
 FIXES To Implement:
 	Driving:
